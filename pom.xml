@@ -22,7 +22,6 @@
     </plugins>
   </build>
   <modules>
-    <module>webapp2</module>
     <module>webapp</module>
   </modules>
 </project>
