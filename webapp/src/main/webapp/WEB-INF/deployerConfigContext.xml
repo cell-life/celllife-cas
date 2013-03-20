@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to Jasig under one or more contributor license agreements. 
+	See the NOTICE file distributed with this work for additional information 
+	regarding copyright ownership. Jasig licenses this file to you under the 
+	Apache License, Version 2.0 (the "License"); you may not use this file except 
+	in compliance with the License. You may obtain a copy of the License at the 
+	following location: http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<!-- | deployerConfigContext.xml centralizes into one file some of the declarative 
+	configuration that | all CAS deployers will need to modify. | | This file 
+	declares some of the Spring-managed JavaBeans that make up a CAS deployment. 
+	| The beans declared in this file are instantiated at context initialization 
+	time by the Spring | ContextLoaderListener declared in web.xml. It finds 
+	this file because this | file is among those declared in the context parameter 
+	"contextConfigLocation". | | By far the most common change you will need 
+	to make in this file is to change the last bean | declaration to replace 
+	the default SimpleTestUsernamePasswordAuthenticationHandler with | one implementing 
+	your approach for authenticating usernames and passwords. + -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<!-- DO NOT enable JNDI pooling for context sources that perform LDAP bind 
+			operations. -->
+		<property name="pooled" value="false" />
+
+		<!-- Although multiple URLs may defined, it's strongly recommended to avoid 
+			this configuration since the implementation attempts hosts in sequence and 
+			requires a connection timeout prior to attempting the next host, which incurs 
+			unacceptable latency on node failure. A proper HA setup for LDAP directories 
+			should use a single virtual host that maps to multiple real hosts using a 
+			hardware load balancer. -->
+		<property name="url" value="ldap://ldap.cell-life.org" />
+
+		<!-- Manager credentials are only required if your directory does not support 
+			anonymous searches. Never provide these credentials for FastBindLdapAuthenticationHandler 
+			since the user's credentials are used for the bind operation. -->
+		<property name="userDn" value="cn=admin,dc=cell-life,dc=org" />
+		<property name="password" value="gUOU6pgUlQ1IcRaKPStysFEB1rfYlM8A" />
+
+		<!-- Place JNDI environment properties here. -->
+		<property name="baseEnvironmentProperties">
+			<map>
+				<!-- Three seconds is an eternity to users. -->
+				<entry key="com.sun.jndi.ldap.connect.timeout" value="3000" />
+				<entry key="com.sun.jndi.ldap.read.timeout" value="3000" />
+
+				<!-- Explained at http://download.oracle.com/javase/1.3/docs/api/javax/naming/Context.html#SECURITY_AUTHENTICATION -->
+				<entry key="java.naming.security.authentication" value="simple" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- FIXME: what about pooling? -->
+
+	<bean id="authenticationManager" class="org.jasig.cas.authentication.AuthenticationManagerImpl">
+		<property name="credentialsToPrincipalResolvers">
+			<list>
+                <bean class="org.jasig.cas.authentication.principal.UsernamePasswordCredentialsToPrincipalResolver" />
+                <bean class="org.jasig.cas.authentication.principal.HttpBasedServiceCredentialsToPrincipalResolver" />
+			</list>
+		</property>
+	
+		<property name="authenticationHandlers">
+			<list>
+				<bean class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"
+                    p:httpClient-ref="httpClient" />
+				<bean class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
+					p:filter="mail=%u" p:searchBase="ou=people,dc=cell-life,dc=org"
+					p:contextSource-ref="contextSource" />
+			</list>
+		</property>
+	
+		<property name="authenticationMetaDataPopulators">
+			<list>
+				<bean class="org.jasig.cas.authentication.SamlAuthenticationMetaDataPopulator" />
+			</list>
+		</property>
+	</bean>
+
+
+    <sec:user-service id="userDetailsService">
+        <sec:user name="admin" authorities="ROLE_ADMIN" />
+    </sec:user-service>
+	
+    <bean id="attributeRepository"
+        class="org.jasig.services.persondir.support.StubPersonAttributeDao">
+        <property name="backingMap">
+            <map>
+                <entry key="uid" value="uid" />
+                <entry key="eduPersonAffiliation" value="eduPersonAffiliation" />
+                <entry key="groupMembership" value="groupMembership" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="serviceRegistryDao" class="org.jasig.cas.services.InMemoryServiceRegistryDaoImpl">
+        <property name="registeredServices">
+            <list>
+                <bean class="org.jasig.cas.services.RegisteredServiceImpl">
+                    <property name="id" value="0" />
+                    <property name="name" value="HTTP" />
+                    <property name="description" value="Only Allows HTTP Urls" />
+                    <property name="serviceId" value="http://**" />
+                    <property name="evaluationOrder" value="10000001" />
+                </bean>
+
+                <bean class="org.jasig.cas.services.RegisteredServiceImpl">
+                    <property name="id" value="1" />
+                    <property name="name" value="HTTPS" />
+                    <property name="description" value="Only Allows HTTPS Urls" />
+                    <property name="serviceId" value="https://**" />
+                    <property name="evaluationOrder" value="10000002" />
+                </bean>
+
+                <bean class="org.jasig.cas.services.RegisteredServiceImpl">
+                    <property name="id" value="2" />
+                    <property name="name" value="IMAPS" />
+                    <property name="description" value="Only Allows HTTPS Urls" />
+                    <property name="serviceId" value="imaps://**" />
+                    <property name="evaluationOrder" value="10000003" />
+                </bean>
+
+                <bean class="org.jasig.cas.services.RegisteredServiceImpl">
+                    <property name="id" value="3" />
+                    <property name="name" value="IMAP" />
+                    <property name="description" value="Only Allows IMAP Urls" />
+                    <property name="serviceId" value="imap://**" />
+                    <property name="evaluationOrder" value="10000004" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+  <bean id="auditTrailManager" class="com.github.inspektr.audit.support.Slf4jLoggingAuditTrailManager" />
+  
+  <bean id="healthCheckMonitor" class="org.jasig.cas.monitor.HealthCheckMonitor">
+    <property name="monitors">
+      <list>
+        <bean class="org.jasig.cas.monitor.MemoryMonitor"
+            p:freeMemoryWarnThreshold="10" />
+        <!--
+          NOTE
+          The following ticket registries support SessionMonitor:
+            * DefaultTicketRegistry
+            * JpaTicketRegistry
+          Remove this monitor if you use an unsupported registry.
+        -->
+        <bean class="org.jasig.cas.monitor.SessionMonitor"
+            p:ticketRegistry-ref="ticketRegistry"
+            p:serviceTicketCountWarnThreshold="5000"
+            p:sessionCountWarnThreshold="100000" />
+      </list>
+    </property>
+  </bean>
+
+</beans>
