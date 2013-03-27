@@ -23,10 +23,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
-
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
 		<!-- DO NOT enable JNDI pooling for context sources that perform LDAP bind 
@@ -39,13 +40,13 @@
 			unacceptable latency on node failure. A proper HA setup for LDAP directories 
 			should use a single virtual host that maps to multiple real hosts using a 
 			hardware load balancer. -->
-		<property name="url" value="ldap://ldap.cell-life.org" />
+		<property name="url" value="${ldap.url}" />
 
 		<!-- Manager credentials are only required if your directory does not support 
 			anonymous searches. Never provide these credentials for FastBindLdapAuthenticationHandler 
 			since the user's credentials are used for the bind operation. -->
-		<property name="userDn" value="cn=admin,dc=cell-life,dc=org" />
-		<property name="password" value="gUOU6pgUlQ1IcRaKPStysFEB1rfYlM8A" />
+		<property name="userDn" value="${ldap.manager.userdn}" />
+		<property name="password" value="${ldap.manager.password}" />
 
 		<!-- Place JNDI environment properties here. -->
 		<property name="baseEnvironmentProperties">
@@ -60,7 +61,23 @@
 		</property>
 	</bean>
 
-	<!-- FIXME: what about pooling? -->
+	<bean id="pooledContextSource"
+		class="org.springframework.ldap.pool.factory.PoolingContextSource"
+		p:minIdle="${ldap.pool.minIdle}" p:maxIdle="${ldap.pool.maxIdle}"
+		p:maxActive="${ldap.pool.maxSize}" p:maxWait="${ldap.pool.maxWait}"
+		p:timeBetweenEvictionRunsMillis="${ldap.pool.evictionPeriod}"
+		p:minEvictableIdleTimeMillis="${ldap.pool.idleTime}" p:testOnBorrow="${ldap.pool.testOnBorrow}"
+		p:testWhileIdle="${ldap.pool.testWhileIdle}" p:dirContextValidator-ref="dirContextValidator"
+		p:contextSource-ref="contextSource" />
+
+	<bean id="dirContextValidator"
+		class="org.springframework.ldap.pool.validation.DefaultDirContextValidator"
+		p:base="" p:filter="objectclass=*">
+		<property name="searchControls">
+			<bean class="javax.naming.directory.SearchControls" p:timeLimit="1000"
+				p:countLimit="1" p:searchScope="0" p:returningAttributes="" />
+		</property>
+	</bean>
 
 	<bean id="authenticationManager" class="org.jasig.cas.authentication.AuthenticationManagerImpl">
 		<property name="credentialsToPrincipalResolvers">
@@ -76,7 +93,8 @@
                     p:httpClient-ref="httpClient" />
 				<bean class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
 					p:filter="mail=%u" p:searchBase="ou=people,dc=cell-life,dc=org"
-					p:contextSource-ref="contextSource" />
+					p:contextSource-ref="contextSource" p:searchContextSource-ref="pooledContextSource"
+                    p:ignorePartialResultException="true" />
 			</list>
 		</property>
 	
