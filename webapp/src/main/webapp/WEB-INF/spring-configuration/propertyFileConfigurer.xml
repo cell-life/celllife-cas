@@ -34,7 +34,7 @@
 		<property name="locations">
 			<list>
 				<value>/WEB-INF/cas.properties</value>
-				<value>file:${CELLLIFE_HOME}/celllife-cas.properties</value>
+				<value>file://${CELLLIFE_HOME}/celllife-cas.properties</value>
 			</list>
 		</property>
 	</bean>
