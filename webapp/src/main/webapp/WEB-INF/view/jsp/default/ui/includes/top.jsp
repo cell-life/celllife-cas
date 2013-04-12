@@ -1,23 +1,4 @@
-<%--
 
-    Licensed to Jasig under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Jasig licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License.  You may obtain a
-    copy of the License at the following location:
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
---%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%@ page session="true" %>
 <%@ page pageEncoding="UTF-8" %>
@@ -43,11 +24,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	    <link rel="icon" href="<c:url value="/favicon.ico" />" type="image/x-icon" />
 	</head>
-	<body id="cas" class="fl-theme-iphone">
-    <div class="flc-screenNavigator-view-container">
-        <div class="fl-screenNavigator-view">
-            <div id="header" class="flc-screenNavigator-navbar fl-navbar fl-table">
-				<h1 id="company-name">Jasig</h1>
-                <h1 id="app-name" class="fl-table-cell">Central Authentication Service (CAS)</h1>
+	<body>
+    <div class="container">
+        <div>        
+        	<div class = "row">
+        	<br></br>
+        	</div>
+            <div class="hero-unit">
+            	<img src="/img/logo.png"></img>
             </div>		
-            <div id="content" class="fl-screenNavigator-scroll-container">
+            <div >

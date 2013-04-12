@@ -41,5 +41,21 @@
 	</dependencies>
 	<build>
 		<finalName>webapp</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.0.4.v20111024</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<systemProperties>
+						<systemProperty>
+							<key>CELLLIFE_HOME</key>
+                            <value>${project.basedir}/../etc</value>
+						</systemProperty>
+					</systemProperties>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
