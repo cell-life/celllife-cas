@@ -1,0 +1,72 @@
+
+html,body {
+	height: 100%;
+}
+
+.wrap {
+	min-height: 100%;
+}
+
+.main {
+	overflow: auto;
+	padding-bottom: 150px; /* this needs to be bigger than footer height*/
+}
+
+.sidetext {
+	text-align: center;
+	position: relative;
+	top: 40%;
+}
+
+.spacer {
+	height: 100px;
+}
+
+.footer {
+	position: relative;
+	margin-top: -120px; /* negative value of footer height */
+	height: 90px;
+	clear: both;
+	padding-top: 10px;
+	left: 1%;
+	width: 98%;
+	background-color: #F2F2F2;
+}
+
+.footertext {
+	font-size: 12px;
+	position: fixed;
+	left: 73%;
+	top: 95.2%;
+}
+
+.img {
+	margin-left: 20px;
+}
+
+.form-horizontal .controls {
+	margin-left: 0px;
+}
+
+.logo {
+	margin-left: 5%;
+	margin-bottom: 30px;
+	height:176px;
+	background-image: url(https://si0.twimg.com/profile_images/1380012097/new_health_logo_25_.jpg);
+	background-repeat: no-repeat;
+	background-position: left top;
+}
+
+.sidetext-row {
+	margin-top: 40px;
+}
+
+.sidetext-span {
+	height: 360px;
+	border-right: 1.1px;
+	border-right-style: solid;
+}
+
+.form-row {
+	padding-left: 10%;
+}
