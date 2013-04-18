@@ -11,6 +11,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <title>CAS &#8211; Central Authentication Service</title>
+
+<c:set var="url">${pageContext.request.requestURL}</c:set>
+<base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />
+
 <c:if
 	test="${not empty requestScope['isMobile'] and not empty mobileCss}">
 	<meta name="viewport"
@@ -19,7 +23,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 </c:if>
 <spring:theme code="standard.custom.css.file" var="customCssFile" />
-<link type="text/css" rel="stylesheet" href="/css/bootstrap-combined.css" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap-combined.css" />
 <link type="text/css" rel="stylesheet" href="<c:url value="${customCssFile}" />" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="icon" href="<c:url value="/favicon.ico" />"
