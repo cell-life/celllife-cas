@@ -1,25 +1,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-</div>
-
-<hr>
-
-<footer id="footer">
-	<a id="jasig" href="http://www.jasig.org" title="go to Jasig home page"></a>
-	<div id="copyright">
-		<p>Copyright &copy; 2005 - 2012 Jasig, Inc. All rights reserved.</p>
-		<p>
-			Powered by <a href="http://www.jasig.org/cas">Jasig Central
-				Authentication Service <%=org.jasig.cas.CasVersion.getVersion()%></a>
-		</p>
+			</div>
+		</div>
 	</div>
 
+	<footer class="footer visible-desktop">
+	<div>
+		<img src="img/Eu_logo.png" class="img" width="120px" />
+		<img src="img/AAT-logo-trans.png" class="img" width="230px" />
+		<img src="img/Cell-Life-Logo-Transparent-H-30mm1.png" class="img" width="180px" />
+
+		<div class="footertext">©2013 Supported by a grant from the
+			European Union. Powered by Cell-Life.</div>
 	</div>
-	</div>
-	<script type="text/javascript"
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-	<script type="text/javascript"
-		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="<c:url value="/js/cas.js" />"></script>
-	</body>
-	</html>
+	</footer>
+
+</body>
+</html>
