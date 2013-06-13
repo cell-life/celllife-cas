@@ -1,26 +1,5 @@
 <jsp:directive.include file="includes/top.jsp" />
 
-			<c:if test="${not pageContext.request.secure}">
-				<div class="alert">
-					<h2>Non-secure Connection</h2>
-					<p>You are currently accessing CAS over a non-secure
-						connection. Single Sign On WILL NOT WORK. In order to have single
-						sign on work, you MUST log in over HTTPS.</p>
-				</div>
-			</c:if>
-
-			<div class="row-fluid sidetext-row">
-				<div class="span4 visible-desktop sidetext-span">
-					<div class="sidetext">
-						Application for quality monitoring for <br />The Office of Health
-						Standards <br />Compliance
-					</div>
-				</div>
-				<div class="span8">
-
-					<div class="row logo"></div>
-
-					<div class="row form-row">
 						<form:form method="post" commandName="${commandName}"
 							htmlEscape="true">
 
@@ -68,8 +47,5 @@
 								</div>
 							</div>
 						</form:form>
-
-					</div>
-				</div>
 
 <jsp:directive.include file="includes/bottom.jsp" />

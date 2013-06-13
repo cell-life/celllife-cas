@@ -1,0 +1,24 @@
+html,body {
+	height: 100%;
+}
+
+.wrap {
+	min-height: 100%;
+}
+
+.main {
+	overflow: auto;
+	padding-bottom: 150px; /* this needs to be bigger than footer height*/
+}
+
+.spacer {
+	height: 100px;
+}
+
+.logo {
+	padding: 35px;
+	height:94px;
+	background-image: url(img/logo.png);
+	background-repeat: no-repeat;
+	background-position: center;
+}

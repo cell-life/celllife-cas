@@ -40,6 +40,14 @@ html,body {
 	top: 95.2%;
 }
 
+.footerimg {
+	height:86px;
+	width:584px;
+	background-image: url(img/footer.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+}
+
 .img {
 	margin-left: 20px;
 }
@@ -49,7 +57,6 @@ html,body {
 }
 
 .logo {
-	margin-left: 5%;
 	margin-bottom: 30px;
 	height:176px;
 	background-image: url(img/new_health_logo_25_.jpg);
@@ -65,8 +72,4 @@ html,body {
 	height: 360px;
 	border-right: 1.1px;
 	border-right-style: solid;
-}
-
-.form-row {
-	padding-left: 10%;
 }

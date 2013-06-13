@@ -1,19 +1,32 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:choose>
+	<c:when test="${not empty sidetext}">
+					</div>
+				</div>
 			</div>
+	</c:when>
+	<c:otherwise>
+                    </div>
+                </div>
+                <div class="row">
+			</div>
+	</c:otherwise>
+</c:choose>
+
 		</div>
 	</div>
 
-	<footer class="footer visible-desktop">
-	<div>
-		<img src="img/Eu_logo.png" class="img" width="120px" />
-		<img src="img/AAT-logo-trans.png" class="img" width="230px" />
-		<img src="img/Cell-Life-Logo-Transparent-H-30mm1.png" class="img" width="180px" />
-
-		<div class="footertext">©2013 Supported by a grant from the
-			European Union. Powered by Cell-Life.</div>
-	</div>
-	</footer>
+	<c:set var="footertext"><spring:theme code="footer.text" /></c:set>
+	
+	<c:if test="${not empty footertext}">
+		<footer class="footer visible-desktop">
+		<div>
+			<div class="footerimg"></div>
+			<div class="footertext">${footertext}</div>
+		</div>
+		</footer>
+	</c:if>
 
 </body>
 </html>

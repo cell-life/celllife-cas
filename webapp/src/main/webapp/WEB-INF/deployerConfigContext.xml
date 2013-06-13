@@ -123,6 +123,15 @@
         <property name="registeredServices">
             <list>
                 <bean class="org.jasig.cas.services.RegisteredServiceImpl">
+                    <property name="id" value="4" />
+                    <property name="name" value="OHSC" />
+                    <property name="theme" value="ohscTheme"/>
+                    <property name="description" value="OHSC website" />
+                    <property name="serviceId" value="http*://*/ohsc/**" />
+                    <property name="evaluationOrder" value="9999999" />
+                </bean>
+
+                <bean class="org.jasig.cas.services.RegisteredServiceImpl">
                     <property name="id" value="0" />
                     <property name="name" value="HTTP" />
                     <property name="description" value="Only Allows HTTP Urls" />
